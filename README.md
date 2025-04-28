@@ -7,21 +7,21 @@ Always be mindful of using the free().
 
 Collections:
 
-array
+array:
 A dynamic array, similar to Java's ArrayList.
 which allows you to store and access elements.
 
-list
+list:
 A doubly linked list, similar to Java's LinkedList.
 You can use it to implement a stack and a queue.
 
-table
+table:
 A hash table, similar to Java's HashMap.
 You can use it to store and access key-value pairs.
 When using it, you need to define the hash algorithm and comparison rules for the keys.
 Keys must be unique.
 
-tree
+tree:
 A binary tree, similar to Java's TreeMap.
 You can use it to store and access key-value pairs, and sort them.
 When using it, you need to define the sorting rules for the keys.
@@ -35,14 +35,14 @@ make sure to use for_each() + free() to release each element before freeing the 
 
 Utils:
 
-str_utils
+str_utils:
 String utilities, similar to Java's String.
 All returned strings are dynamically allocated.
 Please call the free() to release them when no longer in use.
 If you need to store string-type keys in a table,
 the hash_code() in this tool can help you.
 
-arr_utils
+arr_utils:
 Array utilities, similar to Java's Arrays.
 This tool is still under development and currently only supports arrays of int type.
 When using binary_search(), 
