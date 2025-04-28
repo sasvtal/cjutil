@@ -1,69 +1,43 @@
 #include "arr_utils.h"
 
-/**
-* recursion
-* sort an int array with quick sort
+#include <stdio.h>
+#include <stdlib.h>
+
+/*
+    recursion
+    int quick sort
 */
-static void iqsort(int arr[], size_t start, size_t end);
+static void i_quick_sort(int arr[], int start, int end);
+
+/*
+    int swap
+*/
+static void i_swap(int arr[], int i, int j);
 
 
 
-int arr_imax(int arr[], size_t len)
+int *arr_i_new(int len)
 {
-    int max = arr[0];
-    for (size_t i = 1; i < len; i++)
-    {
-        int el = arr[i];
-        if (el > max) max = el;
-    }
+    int *arr = (int *)malloc(len * sizeof(int));
+    if (arr == NULL) return NULL;
 
-    return max;
+    arr_i_fill(arr, len, 0);
+
+    return arr;
 }
 
-int arr_imin(int arr[], size_t len)
+void arr_i_fill(int arr[], int len, int el)
 {
-    int min = arr[0];
-    for (size_t i = 1; i < len; i++)
-    {
-        int el = arr[i];
-        if (el < min) min = el;
-    }
-
-    return min;
+    for (int i = 0; i < len; i++)
+        arr[i] = el;
 }
 
-void arr_iswap(int arr[], size_t i1, size_t i2)
+void arr_i_print(int arr[], int len)
 {
-    int temp = arr[i1];
-    arr[i1] = arr[i2];
-    arr[i2] = temp;
-}
-
-bool arr_iasc(int arr[], size_t len)
-{
-    int base = arr[0];
-    for (size_t i = 1; i < len; i++)
-    {
-        int el = arr[i];
-        if (el < base) return false;
-
-        base = el;
-    }
-
-    return true;
-}
-
-void arr_isort(int arr[], size_t len)
-{
-    iqsort(arr, 0, len - 1);
-}
-
-void arr_iprint(int arr[], size_t len)
-{
-    size_t last = len - 1;
+    int last = len - 1;
 
     printf("[");
-    for (size_t i = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
     {
         printf("%d", arr[i]);
         if (i < last) printf(", ");
@@ -71,14 +45,20 @@ void arr_iprint(int arr[], size_t len)
     printf("]\n");
 }
 
-size_t arr_ibsearch(int arr[], int el, size_t len)
+void arr_i_copy(int arr[], int src[], int num)
 {
-    size_t left = 0;
-    size_t right = len - 1;
+    for (int i = 0; i < num; i++)
+        arr[i] = src[i];
+}
 
-    while (left <= right && right != INVALID_VALUE)
+int arr_i_binary_search(int arr[], int len, int el)
+{
+    int left = 0;
+    int right = len - 1;
+
+    while (left <= right)
     {
-        size_t mid = (left + right) >> 1;
+        int mid = (left + right) >> 1;
         int base = arr[mid];
 
         if (el < base) right = mid - 1;
@@ -86,46 +66,43 @@ size_t arr_ibsearch(int arr[], int el, size_t len)
         else return mid;
     }
 
-    return INVALID_VALUE;
+    return -1;
 }
 
-void arr_ireverse(int arr[], size_t len)
+void arr_i_sort(int arr[], int len)
 {
-    size_t last = len - 1;
-    size_t end = len >> 1;
-
-    for (size_t i = 0; i < end; i++)
-        arr_iswap(arr, i, last - i);
-}
-
-void arr_icopy(int dest[], int src[], size_t num)
-{
-    for (size_t i = 0; i < num; i++)
-        dest[i] = src[i];
+    i_quick_sort(arr, 0, len - 1);
 }
 
 
 
-static void iqsort(int arr[], size_t start, size_t end)
+static void i_quick_sort(int arr[], int start, int end)
 {
-    if (start > end || end == INVALID_VALUE) return;
+    if (start >= end) return;
 
-    size_t left = start;
-    size_t right = end;
+    int left = start;
+    int right = end;
     int base = arr[start];
 
-    while (true)
+    while (1)
     {
         while (left < right && arr[right] >= base) right--;
         while (left < right && arr[left] <= base) left++;
 
         if (left == right) break;
 
-        arr_iswap(arr, left, right);
+        i_swap(arr, left, right);
     }
 
-    arr_iswap(arr, start, left);
+    i_swap(arr, start, left);
 
-    iqsort(arr, start, right - 1);
-    iqsort(arr, left + 1, end);
+    i_quick_sort(arr, start, right - 1);
+    i_quick_sort(arr, left + 1, end);
+}
+
+static void i_swap(int arr[], int i, int j)
+{
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
 }

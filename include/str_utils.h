@@ -1,141 +1,59 @@
 /*
     string utils
-
-    v1.0
 */
 #ifndef STR_UTILS_H
 #define STR_UTILS_H
 
-#include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 
-#define INVALID_VALUE ((size_t)-1)
-
-/**
-* copy the string to the heap
-* 
-* Parameters:
-* - str: string
-* 
-* Returns:
-* - string
+/*
+    create a string
 */
-char *str_copy(char *str);
+char *str_new(char *value);
 
-/**
-* append the string to the source
-* 
-* Parameters:
-* - src: source address
-* - str: string
-* 
-* Returns:
-* - success or failure
+/*
+    append the value to the string
 */
-bool str_append(char **src, char *str);
+bool str_append(char **str, char *value);
 
-/**
-* split the string by the delimiter
-* 
-* Parameters:
-* - str: string
-* - delim: delimiter
-* - num: max number of results
-* 
-* Returns:
-* - result array
+/*
+    check if the string starts with the prefix
 */
-char **str_split(char *str, char *delim, size_t num);
+bool str_starts_with(char *str, char *prefix);
 
-/**
-* check if the string starts with the prefix
-* 
-* Parameters:
-* - str: string
-* - pre: prefix
-* 
-* Returns:
-* - yes or no
+/*
+    check if the string ends with the suffix
 */
-bool str_start(char *str, char *pre);
+bool str_ends_with(char *str, char *suffix);
 
-/**
-* check if the string ends with the suffix
-* 
-* Parameters:
-* - str: string
-* - suf: suffix
-* 
-* Returns:
-* - yes or no
+/*
+    convert an int value to a string
 */
-bool str_end(char *str, char *suf);
+char *str_value_of_int(int value);
 
-/**
-* convert an int value to a string
-* 
-* Parameters:
-* - val: int value
-* 
-* Returns:
-* - string
+/*
+    find the index of the first occurrence of a substring
 */
-char *str_int(int val);
+int str_index_of_sub(char *str, char *substr, int start_index);
 
-/**
-* find the index of the first occurrence of a substring
-* 
-* Parameters:
-* - str: string
-* - sub: substring
-* - index: start index of find
-* 
-* Returns:
-* - index
+/*
+    trim space from the beginning and end of a string
 */
-size_t str_index(char *str, char *sub, size_t index);
+char *str_trim(char *str);
 
-/**
-* count the occurrences of a substring
-* 
-* Parameters:
-* - str: string
-* - sub: substring
-* 
-* Returns:
-* - count
+/*
+    check if the string is empty
 */
-size_t str_count(char *str, char *sub);
+bool str_is_empty(char *str);
 
-/**
-* trim space from the beginning and end of a string
-* 
-* Parameters:
-* - str: string
+/*
+    check if the string is blank
 */
-void str_trim(char *str);
+bool str_is_blank(char *str);
 
-/**
-* check if the string is empty
-* 
-* Parameters:
-* - str: string
-* 
-* Returns:
-* - yes or no
+/*
+    calculate the hash code for the string
 */
-bool str_empty(char *str);
-
-/**
-* check if the string is blank
-* 
-* Parameters:
-* - str: string
-* 
-* Returns:
-* - yes or no
-*/
-bool str_blank(char *str);
+int str_hash_code(char *str);
 
 #endif // !STR_UTILS_H

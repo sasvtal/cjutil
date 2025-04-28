@@ -1,15 +1,17 @@
-#include "l_list.h"
+#include "list.h"
 
-/**
-* create node
+#include <stdlib.h>
+
+/*
+    create a node
 */
 static Node *new_node(void *el);
 
 
 
-LList *ll_new(void)
+List *ls_new(void)
 {
-    LList *list = (LList *)malloc(sizeof(LList));
+    List *list = (List *)malloc(sizeof(List));
     if (list == NULL) return NULL;
 
     list->head = NULL;
@@ -19,7 +21,7 @@ LList *ll_new(void)
     return list;
 }
 
-bool ll_push(LList *list, void *el)
+bool ls_left_push(List *list, void *el)
 {
     Node *head = list->head;
 
@@ -40,7 +42,7 @@ bool ll_push(LList *list, void *el)
     return true;
 }
 
-bool ll_rpush(LList *list, void *el)
+bool ls_right_push(List *list, void *el)
 {
     Node *tail = list->tail;
 
@@ -61,7 +63,7 @@ bool ll_rpush(LList *list, void *el)
     return true;
 }
 
-void *ll_pop(LList *list)
+void *ls_left_pop(List *list)
 {
     Node *head = list->head;
     if (head == NULL) return NULL;
@@ -81,63 +83,63 @@ void *ll_pop(LList *list)
     return rem_el;
 }
 
-void *ll_rpop(LList *list)
+void *ls_right_pop(List *list)
 {
-    Node *head = list->head;
-    if (head == NULL) return NULL;
+    Node *tail = list->tail;
+    if (tail == NULL) return NULL;
 
-    void *rem_el = head->el;
-    list->head = head->next;
+    void *rem_el = tail->el;
+    list->tail = tail->prev;
 
-    if (head->next == NULL)
+    if (tail->prev == NULL)
         // remove the last node
-        list->tail = NULL;
+        list->head = NULL;
     else
-        head->next->prev = NULL;
+        tail->prev->next = NULL;
 
-    free(head);
+    free(tail);
     list->size--;
 
     return rem_el;
 }
 
-void **ll_els(LList *list, bool ltr)
+void **ls_to_array(List *list, bool ltr)
 {
-    void **els = (void **)malloc(list->size * sizeof(void *));
-    if (els == NULL) return NULL;
+    void **arr = (void **)malloc(list->size * sizeof(void *));
+    if (arr == NULL) return NULL;
 
-    size_t index = 0;
+    int index = 0;
     if (ltr)
         for (Node *n = list->head; n != NULL; n = n->next)
-            els[index++] = n->el;
+            arr[index++] = n->el;
     else
         for (Node *n = list->tail; n != NULL; n = n->prev)
-            els[index++] = n->el;
+            arr[index++] = n->el;
 
-    return els;
+    return arr;
 }
 
-void ll_each(LList *list, void (*func)(void *), bool ltr)
+void ls_for_each(List *list, void (*action)(void *), bool ltr)
 {
     if (ltr)
         for (Node *n = list->head; n != NULL; n = n->next)
-            func(n->el);
+            action(n->el);
     else
         for (Node *n = list->tail; n != NULL; n = n->prev)
-            func(n->el);
+            action(n->el);
 }
 
-size_t ll_size(LList *list)
+int ls_size(List *list)
 {
     return list->size;
 }
 
-bool ll_empty(LList *list)
+bool ls_is_empty(List *list)
 {
     return list->size == 0;
 }
 
-void ll_clear(LList *list)
+void ls_clear(List *list)
 {
     for (Node *n = list->head; n != NULL;)
     {
@@ -151,11 +153,11 @@ void ll_clear(LList *list)
     list->size = 0;
 }
 
-void ll_free(LList **list)
+void ls_free(List **list)
 {
     if (*list == NULL) return;
 
-    ll_clear(*list);
+    ls_clear(*list);
 
     free(*list);
 

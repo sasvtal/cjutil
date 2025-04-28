@@ -1,83 +1,56 @@
 #include "str_utils.h"
 
-char *str_copy(char *str)
+#include <stdlib.h>
+#include <string.h>
+
+char *str_new(char *value)
 {
-    size_t len = strlen(str) + 1;
+    int len = strlen(value) + 1;
 
     char *s = (char *)malloc(len);
     if (s == NULL) return NULL;
 
-    strcpy(s, str);
+    strcpy(s, value);
 
     return s;
 }
 
-bool str_append(char **src, char *str)
+bool str_append(char **str, char *value)
 {
-    size_t len = strlen(*src) + strlen(str) + 1;
+    int len = strlen(*str) + strlen(value) + 1;
 
-    char *s = (char *)realloc(*src, len);
+    char *s = (char *)realloc(*str, len);
     if (s == NULL) return false;
 
-    strcat(s, str);
-    *src = s;
+    strcat(s, value);
+    *str = s;
 
     return true;
 }
 
-char **str_split(char *str, char *delim, size_t num)
+bool str_starts_with(char *str, char *prefix)
 {
-    size_t count = str_count(str, delim);
-    if (count == INVALID_VALUE) return NULL;
-
-    count++;
-
-    if (num == 0 || num > count) num = count;
-
-    char **arr = (char **)malloc((num + 1) * sizeof(char *));
-    if (arr == NULL) return NULL;
-
-    arr[num] = NULL;
-    size_t len = strlen(delim);
-
-    char *s = str;
-    for (size_t i = 0; ; i++)
-    {
-        arr[i] = s;
-        if (i == num - 1) break;
-
-        size_t index = str_index(s, delim, 0);
-        s[index] = '\0';
-        index += len;
-        s += index;
-    }
-
-    return arr;
+    return str == strstr(str, prefix);
 }
 
-bool str_start(char *str, char *pre)
+bool str_ends_with(char *str, char *suffix)
 {
-    return str == strstr(str, pre);
+    return str_starts_with(str + (strlen(str) - strlen(suffix)), suffix);
 }
 
-bool str_end(char *str, char *suf)
+char *str_value_of_int(int value)
 {
-    return str_start(str + (strlen(str) - strlen(suf)), suf);
-}
-
-char *str_int(int val)
-{
-    if (val == 0) return str_copy("0");
+    if (value == 0) return str_new("0");
 
     bool neg = false;
-    if (val < 0)
+    if (value < 0)
     {
         neg = true;
-        val *= -1;
+        value *= -1;
     }
 
-    size_t count = 0;
-    for (int n = val; n != 0; n /= 10) count++;
+    int count = 0;
+    for (int n = value; n != 0; n /= 10) count++;
 
     count = neg ? count + 2 : count + 1;
 
@@ -87,71 +60,71 @@ char *str_int(int val)
     s[count - 1] = '\0';
     if (neg) s[0] = '-';
 
-    size_t index = count - 2;
-    for (int n = val; n != 0; n /= 10)
+    int index = count - 2;
+    for (int n = value; n != 0; n /= 10)
         s[index--] = (char)((n % 10) + 48);
 
     return s;
 }
 
-size_t str_index(char *str, char *sub, size_t index)
+int str_index_of_sub(char *str, char *substr, int start_index)
 {
-    size_t len = strlen(str);
+    int len = strlen(str);
 
-    if (index >= len)
-    {
-        if (len > 0) return INVALID_VALUE;
+    if (start_index >= len) return -1;
 
-        index = 0;
-    }
-
-    char *s = strstr(str + index, sub);
-    if (s == NULL) return INVALID_VALUE;
+    char *s = strstr(str + start_index, substr);
+    if (s == NULL) return -1;
 
     return s - str;
 }
 
-size_t str_count(char *str, char *sub)
+char *str_trim(char *str)
 {
-    size_t len = strlen(sub);
-    if (len == 0) return INVALID_VALUE;
+    int len = strlen(str);
+    int left = 0;
+    int right = len - 1;
 
-    size_t count = 0;
-    for (
-        char *s = str;
-        (s = strstr(s, sub)) != NULL;
-        s += len
-    ) count++;
+    for (; left < len && str[left] <= ' '; left++);
+    for (; right >= 0 && str[right] <= ' '; right--);
 
-    return count;
+    int count = right - left + 1;
+
+    char *s = (char *)malloc(count + 1);
+    if (s == NULL) return NULL;
+
+    strncpy(s, str + left, count);
+
+    return s;
 }
 
-void str_trim(char *str)
-{
-    size_t len = strlen(str);
-    size_t start = 0;
-    size_t end = len - 1;
-
-    for (; start < len && str[start] < 33; start++);
-
-    for (; end >= 0 && str[end] < 33; end--);
-
-    size_t count = end - start + 1;
-    memmove(str, str + start, count);
-    str[count] = '\0';
-}
-
-bool str_empty(char *str)
+bool str_is_empty(char *str)
 {
     return strlen(str) == 0;
 }
 
-bool str_blank(char *str)
+bool str_is_blank(char *str)
 {
-    size_t len = strlen(str);
+    int len = strlen(str);
 
-    for (size_t i = 0; i < len; i++)
-        if (str[i] > 32) return false;
+    for (int i = 0; i < len; i++)
+        if (str[i] > ' ') return false;
 
     return true;
+}
+
+int str_hash_code(char *str)
+{
+    int len = strlen(str);
+    int code = 0;
+
+    for (int i = 0; i < len;)
+    {
+        int n = (int)str[i++];
+
+        n = (n << i) ^ n;
+        code += n;
+    }
+
+    return code;
 }

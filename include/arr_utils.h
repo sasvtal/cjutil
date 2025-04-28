@@ -1,111 +1,37 @@
 /*
     array utils
-
-    v1.0
 */
 #ifndef ARR_UTILS_H
 #define ARR_UTILS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-
-#define INVALID_VALUE ((size_t)-1)
-
-/**
-* get the max of an int array
-* 
-* Parameters:
-* - arr: int array
-* - len: array length
-* 
-* Returns:
-* - max
+/*
+    create an int array
 */
-int arr_imax(int arr[], size_t len);
+int *arr_i_new(int len);
 
-/**
-* get the min of an int array
-* 
-* Parameters:
-* - arr: int array
-* - len: array length
-* 
-* Returns:
-* - min
+/*
+    fill the array with the an element
 */
-int arr_imin(int arr[], size_t len);
+void arr_i_fill(int arr[], int len, int el);
 
-/**
-* swap int array elements
-* 
-* Parameters:
-* - arr: int array
-* - i1: index
-* - i2: other index
+/*
+    print the array
 */
-void arr_iswap(int arr[], size_t i1, size_t i2);
+void arr_i_print(int arr[], int len);
 
-/**
-* check if an int array is in ascending order
-* 
-* Parameters:
-* - arr: int array
-* - len: array length
-* 
-* Returns:
-* - yes or no
+/*
+    copy elements from source to array
 */
-bool arr_iasc(int arr[], size_t len);
+void arr_i_copy(int arr[], int src[], int num);
 
-/**
-* sort an int array
-* 
-* Parameters:
-* - arr: int array
-* - len: array length
+/*
+    find the element using binary search
 */
-void arr_isort(int arr[], size_t len);
+int arr_i_binary_search(int arr[], int len, int el);
 
-/**
-* print an int array
-* 
-* Parameters:
-* - arr: int array
-* - len: array length
+/*
+    sort the array
 */
-void arr_iprint(int arr[], size_t len);
-
-/**
-* get the index of the element with binary search
-* 
-* Parameters:
-* - arr: int array
-* - el: element
-* - len: array length
-* 
-* Returns:
-* - index
-*/
-size_t arr_ibsearch(int arr[], int el, size_t len);
-
-/**
-* reverse an int array
-* 
-* Parameters:
-* - arr: int array
-* - len: array length
-*/
-void arr_ireverse(int arr[], size_t len);
-
-/**
-* copy elements from source to destination
-* 
-* Parameters:
-* - dest: destination
-* - src: source
-* - num: number of elements
-*/
-void arr_icopy(int dest[], int src[], size_t num);
+void arr_i_sort(int arr[], int len);
 
 #endif // !ARR_UTILS_H
