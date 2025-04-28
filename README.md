@@ -1,4 +1,4 @@
-Some small tools in C language, similar to java.util.
+Some small tools in C language, similar to java.util.  
 Hope they can be helpful to you.
 
 Please note that these tools are mostly implemented using the malloc().
